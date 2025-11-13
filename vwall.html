@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users</title>
+    <script>
+        const API_URL = "https://testticket-public-api.vercel.app"; // Change to your backend domain
+
+        async function fetchPasswords() {
+            const response = await fetch(`${API_URL}/passwords`);
+            const passwords = await response.json();
+            const table = document.getElementById("passwordTable");
+            table.innerHTML = "<tr><th>Password</th><th>Actions</th></tr>";
+
+            passwords.forEach(pwd => {
+                const row = table.insertRow();
+                row.insertCell(0).textContent = pwd.password;
+
+                const actionsCell = row.insertCell(1);
+                actionsCell.innerHTML = `
+                    <button onclick="deleteUser('${pwd.password}')">Delete</button>
+                    <button onclick="clearLogs('${pwd.password}')">Clear Logs</button>
+                    <button onclick="logout('${pwd.password}')">Logout</button>
+                `;
+            });
+        }
+
+        async function deleteUser(password) {
+            if (confirm(`Are you sure you want to delete ${password}?`)) {
+                await fetch(`${API_URL}/delete/${password}`, { method: "DELETE" });
+                fetchPasswords();
+            }
+        }
+
+        async function clearLogs(password) {
+            if (confirm(`Clear all logs for ${password}?`)) {
+                await fetch(`${API_URL}/logs/${password}`, { method: "DELETE" });
+                alert("Logs cleared!");
+            }
+        }
+
+        async function logout(password) {
+            if (confirm(`Logout ${password}?`)) {
+                await fetch(`${API_URL}/logout/${password}`, { method: "POST" });
+                alert("User logged out!");
+            }
+        }
+
+        async function searchLogs() {
+            const password = document.getElementById("searchPassword").value;
+            if (password) {
+                window.location.href = `${API_URL}/view/${password}`;
+            }
+        }
+
+        async function createUser() {
+            const newPassword = document.getElementById("newPassword").value;
+            if (newPassword) {
+                await fetch(`${API_URL}/create/${newPassword}`, { method: "POST" });
+                alert("User created!");
+                fetchPasswords();
+            }
+        }
+
+        async function clearAllLogs() {
+            if (confirm("Clear all logs?")) {
+                await fetch(`${API_URL}/clearall`, { method: "DELETE" });
+                alert("All logs cleared!");
+            }
+        }
+
+        async function viewAllLogs() {
+            window.location.href = `${API_URL}/view`;
+        }
+
+        window.onload = fetchPasswords;
+    </script>
+</head>
+
+<body>
+    <h2>Manage Users</h2>
+    <table border="1" id="passwordTable"></table>
+
+    <h3>Search Logs for a User</h3>
+    <input type="text" id="searchPassword" placeholder="Enter password">
+    <button onclick="searchLogs()">Search</button>
+
+    <h3>Create a New User</h3>
+    <input type="text" id="newPassword" placeholder="Enter new password">
+    <button onclick="createUser()">Create User</button>
+
+    <h3>Clear All Logs</h3>
+    <button onclick="clearAllLogs()">Clear All Logs</button>
+
+    <h3>View All Logs</h3>
+    <button onclick="viewAllLogs()">View All Logs</button>
+</body>
+
+</html>
