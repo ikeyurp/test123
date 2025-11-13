@@ -1,101 +1,327 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Users</title>
-    <script>
-        const API_URL = "https://testticket-public-api.vercel.app"; // Change to your backend domain
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Monthly Pass - Mockup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --blue:#0b79d0;
+      --card-bg:#ffffff;
+      --muted:#9aa0a6;
+      --pink:#ffdce2;
+      --accent:#ef3b3b;
+      --shadow: 0 18px 30px rgba(10,20,40,0.12);
+      --rounded:20px;
+      --glass: rgba(255,255,255,0.9);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(#eaf5ff,#fff 60%);
+      color:#111;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:28px 12px;
+      min-height:100vh;
+    }
 
-        async function fetchPasswords() {
-            const response = await fetch(`${API_URL}/passwords`);
-            const passwords = await response.json();
-            const table = document.getElementById("passwordTable");
-            table.innerHTML = "<tr><th>Password</th><th>Actions</th></tr>";
+    /* Mobile container */
+    .phone {
+      width:390px;
+      max-width:calc(100% - 24px);
+      background:transparent;
+      border-radius:30px;
+      overflow:visible;
+      position:relative;
+    }
 
-            passwords.forEach(pwd => {
-                const row = table.insertRow();
-                row.insertCell(0).textContent = pwd.password;
+    /* Header */
+    .header {
+      height:120px;
+      background: linear-gradient(180deg,var(--blue), #0e7fd6);
+      border-top-left-radius:28px;
+      border-top-right-radius:28px;
+      padding:14px 16px;
+      color:white;
+      display:flex;
+      align-items:flex-end;
+      gap:12px;
+    }
+    .back {
+      width:36px;
+      height:36px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:10px;
+      background:rgba(255,255,255,0.06);
+      font-weight:600;
+      cursor:pointer;
+    }
+    .title {
+      font-size:20px;
+      font-weight:700;
+      margin-bottom:6px;
+    }
 
-                const actionsCell = row.insertCell(1);
-                actionsCell.innerHTML = `
-                    <button onclick="deleteUser('${pwd.password}')">Delete</button>
-                    <button onclick="clearLogs('${pwd.password}')">Clear Logs</button>
-                    <button onclick="logout('${pwd.password}')">Logout</button>
-                `;
-            });
-        }
+    /* Card */
+    .card {
+      background:var(--card-bg);
+      border-radius:20px;
+      margin-top:-40px;
+      padding:20px;
+      box-shadow:var(--shadow);
+      min-height:640px;
+      display:flex;
+      flex-direction:column;
+      gap:20px;
+      overflow:hidden;
+    }
 
-        async function deleteUser(password) {
-            if (confirm(`Are you sure you want to delete ${password}?`)) {
-                await fetch(`${API_URL}/delete/${password}`, { method: "DELETE" });
-                fetchPasswords();
-            }
-        }
+    /* QR block */
+    .qr-wrap {
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      margin-top:6px;
+    }
+    .qr {
+      width:170px;
+      height:170px;
+      background:var(--pink);
+      border-radius:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:12px;
+      box-shadow: inset 0 -6px 10px rgba(0,0,0,0.03);
+    }
+    .qr svg {
+      width:100%;
+      height:100%;
+      border-radius:6px;
+      background:white;
+      padding:6px;
+    }
+    .tap {
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+      margin-top:6px;
+    }
 
-        async function clearLogs(password) {
-            if (confirm(`Clear all logs for ${password}?`)) {
-                await fetch(`${API_URL}/logs/${password}`, { method: "DELETE" });
-                alert("Logs cleared!");
-            }
-        }
+    /* Main info */
+    .info {
+      text-align:center;
+      padding-top:4px;
+    }
+    .brand {
+      color:var(--accent);
+      font-weight:800;
+      font-size:32px;
+      letter-spacing:1px;
+    }
+    .main-row {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:18px;
+      margin-top:6px;
+    }
+    .badge {
+      width:64px;
+      height:64px;
+      border-radius:8px;
+      border:3px solid rgba(0,0,0,0.08);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      font-weight:700;
+      color:#fff;
+      background:linear-gradient(180deg,#ffd7df,#ffc7d6);
+      box-shadow: 0 6px 12px rgba(200,120,140,0.06);
+      font-size:12px;
+    }
+    .badge .mon { font-size:12px; opacity:0.95 }
+    .badge .yr { font-size:12px; opacity:0.95 }
 
-        async function logout(password) {
-            if (confirm(`Logout ${password}?`)) {
-                await fetch(`${API_URL}/logout/${password}`, { method: "POST" });
-                alert("User logged out!");
-            }
-        }
+    .zone {
+      text-align:center;
+    }
+    .zone .num {
+      font-size:72px;
+      font-weight:800;
+      line-height:0.9;
+      margin:0;
+    }
+    .zone .muted {
+      font-size:16px;
+      font-weight:700;
+      letter-spacing:0.6px;
+      color:#111;
+      margin-top:4px;
+    }
 
-        async function searchLogs() {
-            const password = document.getElementById("searchPassword").value;
-            if (password) {
-                window.location.href = `${API_URL}/view/${password}`;
-            }
-        }
+    /* large white space mimic */
+    .spacer {
+      flex:1;
+      min-height:130px;
+      background: linear-gradient(90deg, rgba(180,170,140,0.12) 0 28%, rgba(120,160,240,0.18) 28% 58%, rgba(190,190,140,0.12) 58% 100%);
+      height:34px;
+      margin:12px 0 6px 0;
+      border-radius:4px;
+      opacity:0.25;
+    }
 
-        async function createUser() {
-            const newPassword = document.getElementById("newPassword").value;
-            if (newPassword) {
-                await fetch(`${API_URL}/create/${newPassword}`, { method: "POST" });
-                alert("User created!");
-                fetchPasswords();
-            }
-        }
+    /* progress area */
+    .progress-area {
+      padding:6px 4px 4px 4px;
+    }
+    .bar {
+      height:16px;
+      background:#eee;
+      border-radius:10px;
+      position:relative;
+      overflow:hidden;
+    }
+    .bar .seg {
+      height:100%;
+      position:absolute;
+      top:0;
+    }
+    .seg.a { left:0; width:25%; background:rgba(170,150,110,0.6); }
+    .seg.b { left:25%; width:25%; background:rgba(136,174,245,0.6); }
+    .seg.c { left:50%; width:50%; background:rgba(180,170,120,0.6); }
 
-        async function clearAllLogs() {
-            if (confirm("Clear all logs?")) {
-                await fetch(`${API_URL}/clearall`, { method: "DELETE" });
-                alert("All logs cleared!");
-            }
-        }
+    .usage {
+      height:8px;
+      background:#e9f1ff;
+      border-radius:6px;
+      margin-top:10px;
+      overflow:hidden;
+    }
+    .usage .fill {
+      height:100%;
+      width:36%;
+      background:#1e90ff;
+      border-radius:6px 0 0 6px;
+    }
 
-        async function viewAllLogs() {
-            window.location.href = `${API_URL}/view`;
-        }
+    .expiry {
+      text-align:center;
+      margin-top:10px;
+    }
+    .expiry h3 {
+      margin:6px 0;
+      font-size:24px;
+    }
+    .expiry a {
+      color:var(--blue);
+      text-decoration:underline;
+      font-size:14px;
+    }
 
-        window.onload = fetchPasswords;
-    </script>
+    /* footer rounding hint */
+    .card::after{
+      content:'';
+      position:absolute;
+      left:12px;
+      right:12px;
+      bottom:8px;
+      height:8px;
+      border-radius:8px;
+      background:transparent;
+    }
+
+    /* responsive smaller */
+    @media (max-width:420px){
+      .phone{width:360px}
+      .qr{width:150px;height:150px}
+      .zone .num{font-size:60px}
+    }
+  </style>
 </head>
-
 <body>
-    <h2>Manage Users</h2>
-    <table border="1" id="passwordTable"></table>
+  <div class="phone" role="application" aria-label="Monthly Pass mockup">
+    <div class="header">
+      <div class="back" aria-hidden="true">&#x2190;</div>
+      <div class="title">Monthly Pass</div>
+    </div>
 
-    <h3>Search Logs for a User</h3>
-    <input type="text" id="searchPassword" placeholder="Enter password">
-    <button onclick="searchLogs()">Search</button>
+    <div class="card">
+      <div class="qr-wrap">
+        <div class="qr" title="QR code (tap to enlarge)">
+          <!-- Simple SVG "QR-like" placeholder. Replace with real QR image inside the <img> if needed. -->
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QR placeholder">
+            <rect x="0" y="0" width="120" height="120" rx="6" fill="#fff"/>
+            <!-- fake QR blocks -->
+            <g fill="#000">
+              <rect x="6" y="6" width="24" height="24"/>
+              <rect x="90" y="6" width="24" height="24"/>
+              <rect x="6" y="90" width="24" height="24"/>
 
-    <h3>Create a New User</h3>
-    <input type="text" id="newPassword" placeholder="Enter new password">
-    <button onclick="createUser()">Create User</button>
+              <!-- inner pattern -->
+              <rect x="40" y="18" width="6" height="6"/>
+              <rect x="52" y="18" width="6" height="6"/>
+              <rect x="28" y="36" width="6" height="6"/>
+              <rect x="64" y="36" width="6" height="6"/>
+              <rect x="18" y="64" width="6" height="6"/>
+              <rect x="36" y="64" width="6" height="6"/>
+              <rect x="72" y="52" width="6" height="6"/>
+              <rect x="84" y="70" width="6" height="6"/>
+              <rect x="56" y="82" width="6" height="6"/>
+              <rect x="80" y="36" width="6" height="6"/>
+              <rect x="36" y="92" width="6" height="6"/>
+              <rect x="98" y="36" width="6" height="6"/>
+            </g>
+          </svg>
+        </div>
+      </div>
 
-    <h3>Clear All Logs</h3>
-    <button onclick="clearAllLogs()">Clear All Logs</button>
+      <div class="tap">Tap to enlarge</div>
 
-    <h3>View All Logs</h3>
-    <button onclick="viewAllLogs()">View All Logs</button>
+      <div class="info" aria-hidden="false">
+        <div class="brand">INTERSTATE</div>
+
+        <div class="main-row" role="group" aria-label="Zone and date">
+          <div class="badge" aria-hidden="true">
+            <div class="mon">NOV</div>
+            <div class="yr">2025</div>
+          </div>
+
+          <div class="zone">
+            <div class="num">3</div>
+            <div class="muted">ZONE RIDE</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="spacer" aria-hidden="true"></div>
+
+      <div class="progress-area" aria-label="validity and usage">
+        <div class="bar" aria-hidden="true">
+          <div class="seg a"></div>
+          <div class="seg b"></div>
+          <div class="seg c"></div>
+        </div>
+
+        <div class="usage" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="36" aria-label="usage progress">
+          <div class="fill"></div>
+        </div>
+
+        <div class="expiry">
+          <h3>Expires in 19 days.</h3>
+          <a href="#" onclick="event.preventDefault()">View Onboard Validator Instructions</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
-
 </html>
