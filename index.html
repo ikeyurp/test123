@@ -130,10 +130,20 @@
             event.preventDefault();
         }, { passive: false });
 
-        // Extra: Disable key combinations like F12, Ctrl+Shift+I for opening DevTools
+        // Extra: Disable key combinations like F12, Ctrl+Shift+I, Cmd+Option+I for opening DevTools
         document.addEventListener('keydown', function(event) {
-            // Disable F12, Ctrl+Shift+I, Ctrl+U, and others that could trigger dev tools
-            if ((event.key === "F12") || (event.ctrlKey && event.shiftKey && event.key === "I") || (event.ctrlKey && event.key === "U") || (event.ctrlKey && event.shiftKey && event.key === "C") || (event.ctrlKey)) {
+            const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;  // Check if the platform is Mac
+            // Windows/Linux DevTools shortcuts: F12, Ctrl+Shift+I, Ctrl+U
+            // Mac DevTools shortcuts: Cmd+Option+I, Cmd+Option+U
+            
+            // Check for key combinations based on the OS
+            if (
+                (event.key === "F12") || // F12 (DevTools shortcut)
+                (event.ctrlKey && event.shiftKey && event.key === "I") || // Ctrl+Shift+I (Windows/Linux DevTools)
+                (event.ctrlKey && event.key === "U") || // Ctrl+U (View Source)
+                (isMac && event.key === "I" && event.metaKey && event.altKey) || // Cmd+Option+I (Mac DevTools)
+                (isMac && event.key === "U" && event.metaKey && event.altKey) // Cmd+Option+U (Mac View Source)
+            ) {
                 event.preventDefault();
                 alert('Developer Tools are disabled!');
             }
