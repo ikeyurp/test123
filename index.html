@@ -13,21 +13,6 @@
     <meta name="apple-mobile-web-app-title" content="NJ Transit">
     <link rel="apple-touch-icon" href="icon.png">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <script>
-        function toggleVisibility() {
-            var id1 = document.getElementById("curved-background");
-            var id2 = document.getElementById("qr-clicked");
-
-            // Hide id1 and show id2
-            if (id1.style.display !== "none") {
-                id1.style.display = "none";
-                id2.style.display = "block";
-            } else {
-                id1.style.display = "block";
-                id2.style.display = "none";
-            }
-        }
-    </script>
 </head>
 
 <body>
@@ -40,8 +25,8 @@
         <div class="header">Monthly Pass</div>
         <div class="card">
             <div style="display: grid; justify-content: center;">
-                <div class="qr" onclick="toggleVisibility()">
-                    <img class="qr-code" src="your-qr-code-image.jpeg" class="QRCODE" id="QRCODE" alt="QR Code">
+                <div class="qr">
+                    <img onclick="toggleVisibility()" class="qr-code" src="your-qr-code-image.jpeg" class="QRCODE" id="QRCODE" alt="QR Code">
                 </div>
                 <div class="tap">Tap to enlarge</div>
                 <div style="border-bottom: 1px dashed #00000050;width: 70vw;padding: 0.2vh;"></div>
@@ -84,8 +69,8 @@
     <div class="qr-clicked" id="qr-clicked">
         <div class="header">Monthly Pass</div>
         <div style="display: grid; justify-content: center;">
-                <div class="qr-big" onclick="toggleVisibility()">
-                    <img class="qr-code" src="your-qr-code-image.jpeg" class="QRCODE" id="QRCODE" alt="QR Code">
+                <div class="qr-big">
+                    <img class="qr-code" onclick="toggleVisibility()" src="your-qr-code-image.jpeg" class="QRCODE" id="QRCODE" alt="QR Code">
                 </div>
                 <div class="tap">Tap to enlarge</div>
                 <div style="border-bottom: 1px dashed #00000050;width: 80vw;padding: 0.2vh;"></div>
@@ -147,6 +132,21 @@
 
         updateMonthAndYear();
         updateCountdown();
+    </script>
+    <script>
+        function toggleVisibility() {
+            var id1 = document.getElementById("curved-background");
+            var id2 = document.getElementById("qr-clicked");
+
+            // Hide id1 and show id2
+            if (id1.style.display !== "none") {
+                id1.style.display = "none";
+                id2.style.display = "block";
+            } else {
+                id1.style.display = "block";
+                id2.style.display = "none";
+            }
+        }
     </script>
     <!-- <script>
         async function validateSession() {
