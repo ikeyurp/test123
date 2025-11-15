@@ -103,32 +103,41 @@
     </script>
     <script>
         // Disable right-click on the entire document
-        document.addEventListener('contextmenu', function (event) {
+        document.addEventListener('contextmenu', function(event) {
             event.preventDefault();
-            alert("Right-click is disabled on this page!");
         });
 
         // Disable text selection
-        document.addEventListener('selectstart', function (event) {
+        document.addEventListener('selectstart', function(event) {
             event.preventDefault();
-            alert("Text selection is disabled on this page!");
         });
 
-        // Disable keyboard shortcuts like F12, Ctrl+Shift+I (for inspect element) and other dev tools
-        document.addEventListener('keydown', function (event) {
-            // Disable F12 and other dev tools shortcuts
-            if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && event.key === 'I') ||
-                (event.ctrlKey && event.key === 'U')) {
+        // Function to detect if DevTools is open based on the height difference
+        function detectDevTools() {
+            const devToolsOpened = window.outerHeight - window.innerHeight > 100 || window.outerWidth - window.innerWidth > 100;
+            
+            if (devToolsOpened) {
+                // Redirect to a different website if DevTools are open
+                window.location.href = "https://www.google.com";  // Replace with the redirect URL
+            }
+        }
+
+        // Periodically check if DevTools is open
+        setInterval(detectDevTools, 1000);
+
+        // Optional: Additional measure to block touch-based interactions (for mobile devices)
+        document.body.addEventListener('touchstart', function(event) {
+            event.preventDefault();
+        }, { passive: false });
+
+        // Extra: Disable key combinations like F12, Ctrl+Shift+I for opening DevTools
+        document.addEventListener('keydown', function(event) {
+            // Disable F12, Ctrl+Shift+I, Ctrl+U, and others that could trigger dev tools
+            if ((event.key === "F12") || (event.ctrlKey && event.shiftKey && event.key === "I") || (event.ctrlKey && event.key === "U") || (event.ctrlKey && event.shiftKey && event.key === "C") || (event.ctrlKey)) {
                 event.preventDefault();
-                alert("Developer tools are disabled on this page!");
+                alert('Developer Tools are disabled!');
             }
         });
-
-        // Disable mouse events like right-click and selection (for touch devices too)
-        document.body.addEventListener('touchstart', function (event) {
-            event.preventDefault();
-            alert("Touch events are restricted!");
-        }, { passive: false });
     </script>
     <!-- <script>
         async function validateSession() {
