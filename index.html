@@ -13,19 +13,34 @@
     <meta name="apple-mobile-web-app-title" content="NJ Transit">
     <link rel="apple-touch-icon" href="icon.png">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <script>
+        function toggleVisibility() {
+            var id1 = document.getElementById("curved-background");
+            var id2 = document.getElementById("qr-clicked");
+
+            // Hide id1 and show id2
+            if (id1.style.display !== "none") {
+                id1.style.display = "none";
+                id2.style.display = "block";
+            } else {
+                id1.style.display = "block";
+                id2.style.display = "none";
+            }
+        }
+    </script>
 </head>
 
 <body>
-    <div id="login-container">
+    <!-- <div id="login-container">
         <input type="password" id="password" placeholder="Enter Password">
         <button onclick="login()">Login</button>
         <p id="login-message"></p>
-    </div>
+    </div> -->
     <div class="curved-background">
         <div class="header">Monthly Pass</div>
         <div class="card">
             <div style="display: grid; justify-content: center;">
-                <div class="qr">
+                <div class="qr" onclick="toggleVisibility()">
                     <img class="qr-code" src="your-qr-code-image.jpeg" class="QRCODE" id="QRCODE" alt="QR Code">
                 </div>
                 <div class="tap">Tap to enlarge</div>
@@ -66,6 +81,38 @@
             </div>
         </div>
     </div>
+    <div class="qr-clicked" id="qr-clicked">
+        <div class="header">Monthly Pass</div>
+        <div style="display: grid; justify-content: center;">
+                <div class="qr-big" onclick="toggleVisibility()">
+                    <img class="qr-code" src="your-qr-code-image.jpeg" class="QRCODE" id="QRCODE" alt="QR Code">
+                </div>
+                <div class="tap">Tap to enlarge</div>
+                <div style="border-bottom: 1px dashed #00000050;width: 80vw;padding: 0.2vh;"></div>
+                <div class="info">
+                    <div class="interstate">INTERSTATE</div>
+                    <table style="width: 100%;">
+                        <tbody>
+                            <tr>
+                                <td style="width: 25%; text-align: center;">
+                                    <div class="month" id="pass_month_year">
+                                        OCT 2025
+                                    </div>
+                                </td>
+                                <td style="width: 50%; text-align: center;">
+                                    <div class="zone">
+                                        <div class="number" onclick="updateZoneText()">2</div>
+                                        <div class="text">ZONE RIDE</div>
+                                    </div>
+                                </td>
+                                <td style="width: 25%; text-align: center;">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    </div>
     <script>
         function updateMonthAndYear() {
             var currentDate = new Date();
@@ -101,7 +148,7 @@
         updateMonthAndYear();
         updateCountdown();
     </script>
-    <script>
+    <!-- <script>
         async function validateSession() {
             const storedPassword = localStorage.getItem("password");
 
@@ -162,7 +209,7 @@
         }
 
         validateSession();
-    </script>
+    </script> -->
 </body>
 
 </html>
