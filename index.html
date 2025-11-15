@@ -92,7 +92,9 @@
 
             const remainingDays = Math.ceil(timeRemaining / (1000 * 60 * 60 * 24));
 
-            const progressPercentage = (remainingDays / deadlineDate) * 100;
+            const totalDaysInMonth = new Date(currentDate.getFullYear(), currentMonth + 1, 0).getDate();
+            const daysPassed = currentDate.getDate();
+            const progressPercentage = (daysPassed / totalDaysInMonth) * 100;
 
             countdown.textContent = `${remainingDays.toString()}`;
 
