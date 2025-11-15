@@ -102,47 +102,36 @@
         updateCountdown();
     </script>
     <script>
-        // Disable right-click on the entire document
         document.addEventListener('contextmenu', function(event) {
             event.preventDefault();
         });
 
-        // Disable text selection
         document.addEventListener('selectstart', function(event) {
             event.preventDefault();
         });
 
-        // Function to detect if DevTools is open based on the height difference
         function detectDevTools() {
             const devToolsOpened = window.outerHeight - window.innerHeight > 100 || window.outerWidth - window.innerWidth > 100;
             
             if (devToolsOpened) {
-                // Redirect to a different website if DevTools are open
-                window.location.href = "https://www.google.com";  // Replace with the redirect URL
+                window.location.href = "https://www.google.com";
             }
         }
 
-        // Periodically check if DevTools is open
         setInterval(detectDevTools, 1000);
 
-        // Optional: Additional measure to block touch-based interactions (for mobile devices)
         document.body.addEventListener('touchstart', function(event) {
             event.preventDefault();
         }, { passive: false });
 
-        // Extra: Disable key combinations like F12, Ctrl+Shift+I, Cmd+Option+I for opening DevTools
         document.addEventListener('keydown', function(event) {
-            const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;  // Check if the platform is Mac
-            // Windows/Linux DevTools shortcuts: F12, Ctrl+Shift+I, Ctrl+U
-            // Mac DevTools shortcuts: Cmd+Option+I, Cmd+Option+U
-            
-            // Check for key combinations based on the OS
+            const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;            
             if (
-                (event.key === "F12") || // F12 (DevTools shortcut)
-                (event.ctrlKey && event.shiftKey && event.key === "I") || // Ctrl+Shift+I (Windows/Linux DevTools)
-                (event.ctrlKey && event.key === "U") || // Ctrl+U (View Source)
-                (isMac && event.key === "I" && event.metaKey && event.altKey) || // Cmd+Option+I (Mac DevTools)
-                (isMac && event.key === "U" && event.metaKey && event.altKey) // Cmd+Option+U (Mac View Source)
+                (event.key === "F12") ||
+                (event.ctrlKey && event.shiftKey && event.key === "I") ||
+                (event.ctrlKey && event.key === "U") ||
+                (isMac && event.key === "I" && event.metaKey && event.altKey) ||
+                (isMac && event.key === "U" && event.metaKey && event.altKey)
             ) {
                 event.preventDefault();
                 alert('Developer Tools are disabled!');
