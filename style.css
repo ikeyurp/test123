@@ -150,7 +150,7 @@ body {
     left: 0;
     top: 0;
     height: 100%;
-    width: 30%;
+    width: var(--progress-width, 100%);
     background: #007aff;
 }
 

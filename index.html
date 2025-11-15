@@ -59,7 +59,7 @@
                     <div class="color-block green"></div>
                     <div class="color-block blue"></div>
                 </div>
-                <div class="progress-bar"></div>
+                <div class="progress-bar" id="progress-bar"></div>
                 <div class="expiry">Expires in <span id="countdown">1</span> days.</div>
                 <div class="validator">View Onboard Validator Instructions</div>
             </div>
@@ -92,13 +92,18 @@
 
             const remainingDays = Math.ceil(timeRemaining / (1000 * 60 * 60 * 24));
 
+            const progressPercentage = (daysPassed / totalDaysInMonth) * 100;
+
             countdown.textContent = `${remainingDays.toString()}`;
+
+            document.querySelector('.progress-bar').style.setProperty('--progress-width', `${100 - progressPercentage}%`);
         }
 
         document.querySelector('meta[name="theme-color"]').setAttribute("content", "#1d86d7");
 
         updateMonthAndYear();
         updateCountdown();
+        setInterval(updateCountdown, 1000);
     </script>
     <script>
         document.addEventListener('contextmenu', function(event) {
