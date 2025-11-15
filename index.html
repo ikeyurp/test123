@@ -21,7 +21,7 @@
         <button onclick="login()">Login</button>
         <p id="login-message"></p>
     </div> -->
-    <div class="curved-background">
+    <div class="curved-background" id="curved-background">
         <div class="header">Monthly Pass</div>
         <div class="card">
             <div style="display: grid; justify-content: center;">
@@ -138,7 +138,6 @@
             var id1 = document.getElementById("curved-background");
             var id2 = document.getElementById("qr-clicked");
 
-            // Hide id1 and show id2
             if (id1.style.display !== "none") {
                 id1.style.display = "none";
                 id2.style.display = "block";
