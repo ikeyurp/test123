@@ -34,7 +34,7 @@
                                 </td>
                                 <td style="width: 50%; text-align: center;">
                                     <div class="zone">
-                                        <div class="number">3</div>
+                                        <div class="number" onclick="updateZoneText()">3</div>
                                         <div class="text">ZONE RIDE</div>
                                     </div>
                                 </td>
@@ -66,6 +66,13 @@
             var year = currentDate.getFullYear();
             var content = month + " " + year;
             document.getElementById("pass_month_year").innerHTML = content;
+        }
+
+        function updateZoneText() {
+            const zoneElement = document.querySelector('.number');
+            let currentZone = parseInt(zoneElement.textContent, 10);
+            currentZone = currentZone === 9 ? 2 : currentZone + 1;
+            zoneElement.textContent = currentZone;
         }
 
         updateMonthAndYear();
