@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="color.css">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    
+
 </head>
 
 <body>
@@ -28,9 +28,8 @@
                         <tbody>
                             <tr>
                                 <td style="width: 25%; text-align: center;">
-                                    <div class="month">
-                                        <span>NOV</span>
-                                        <span>2025</span>
+                                    <div class="month" id="pass_month_year">
+                                        NOV 2025
                                     </div>
                                 </td>
                                 <td style="width: 50%; text-align: center;">
@@ -59,6 +58,17 @@
             </div>
         </div>
     </div>
+    <script>
+        function updateMonthAndYear() {
+            var currentDate = new Date();
+            var monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+            var month = monthNames[currentDate.getMonth()];
+            var year = currentDate.getFullYear();
+            var student = "";
+            var content = month + "<br>" + year + "<br>" + student;
+            document.getElementById("pass_month_year").innerHTML = content;
+        }
+    </script>
 </body>
 
 </html>
