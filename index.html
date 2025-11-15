@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="color.css">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    
 </head>
 
 <body>
@@ -16,7 +18,7 @@
         <div class="card">
             <div style="display: grid; justify-content: center;">
                 <div class="qr">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?data=SampleQR&size=150x150" alt="QR Code">
+                    <img class="qr-code" src="your-qr-code-image.jpeg" id="QRCODE" alt="QR Code">
                 </div>
                 <div class="tap">Tap to enlarge</div>
                 <div style="border-bottom: 1px dashed #00000050;width: 70vw;padding: 0.2vh;"></div>
