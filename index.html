@@ -8,17 +8,20 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="color.css">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-
 </head>
 
 <body>
+    <div id="login-container">
+        <input type="password" id="password" placeholder="Enter Password">
+        <button onclick="login()">Login</button>
+        <p id="login-message"></p>
+    </div>
     <div class="curved-background">
         <div class="header">Monthly Pass</div>
-
         <div class="card">
             <div style="display: grid; justify-content: center;">
                 <div class="qr">
-                    <img class="qr-code" src="your-qr-code-image.jpeg" id="QRCODE" alt="QR Code">
+                    <img class="qr-code" src="your-qr-code-image.jpeg" class="QRCODE" id="QRCODE" alt="QR Code">
                 </div>
                 <div class="tap">Tap to enlarge</div>
                 <div style="border-bottom: 1px dashed #00000050;width: 70vw;padding: 0.2vh;"></div>
@@ -90,6 +93,68 @@
 
         updateMonthAndYear();
         updateCountdown();
+    </script>
+    <script>
+        async function validateSession() {
+            const storedPassword = localStorage.getItem("password");
+
+            if (storedPassword) {
+                try {
+                    const response = await fetch("https://testticket-public-api.vercel.app/login", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ password: storedPassword }),
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        // Show main content if session is valid
+                        document.getElementById("login-container").style.display = "none";
+                        document.getElementById("curved-background").style.display = "block";
+                    } else {
+                        // Clear localStorage and ask for login if validation fails
+                        localStorage.removeItem("password");
+                        showLoginScreen();
+                    }
+                } catch (error) {
+                    console.error("Error validating session:", error);
+                    showLoginScreen();
+                }
+            } else {
+                showLoginScreen();
+            }
+        }
+
+        function showLoginScreen() {
+            document.getElementById("login-container").style.display = "flex";
+            document.getElementById("curved-background").style.display = "none";
+        }
+
+        async function login() {
+            const password = document.getElementById("password").value;
+
+            try {
+                const response = await fetch("https://testticket-public-api.vercel.app/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ password }),
+                });
+
+                const data = await response.json();
+                document.getElementById("login-message").textContent = data.message;
+
+                if (response.ok) {
+                    localStorage.setItem("password", password); // Store password in localStorage
+                    document.getElementById("login-container").style.display = "none";
+                    document.getElementById("curved-background").style.display = "block";
+                }
+            } catch (error) {
+                console.error("Login error:", error);
+            }
+        }
+
+        validateSession();
     </script>
 </body>
 
